@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Adivinhação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1d1d1d;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .game-box {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input[type="number"] {
+            width: 60%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #333;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #1d1d1d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00cc00;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #message {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .lost-message {
+            color: red;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="game-container">
+        <h1 id="title">Jogo de Adivinhação</h1>
+        <div class="game-info">
+            <p id="score">Pontuação: 0</p>
+            <p id="lives">Vidas: 3</p>
+            <p id="level">Fase: 1</p>
+        </div>
+        <div class="game-box">
+            <p id="message">Adivinhe o número escondido.</p>
+            <div>
+                Número escondido: <span id="hidden-number">X</span>
+            </div>
+            <input type="number" id="guess" placeholder="Digite um número" />
+            <button id="submit" onclick="checkGuess()">Submeter</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let secretNumber;
+        let gameStarted = false;
+
+        const title = document.getElementById("title");
+        const message = document.getElementById("message");
+        const scoreElement = document.getElementById("score");
+        const livesElement = document.getElementById("lives");
+        const levelElement = document.getElementById("level");
+        const hiddenNumberElement = document.getElementById("hidden-number");
+        const gameContainer = document.getElementById("game-container");
+
+        function startNewGame() {
+            score = 0;
+            lives = 3;
+            level = 1;
+            scoreElement.textContent = `Pontuação: ${score}`;
+            livesElement.textContent = `Vidas: ${lives}`;
+            levelElement.textContent = `Fase: ${level}`;
+            message.textContent = "Adivinhe o número escondido.";
+            hiddenNumberElement.textContent = "X";
+            gameContainer.style.backgroundColor = "#333";
+            title.style.color = "#00ff00";
+            setNewSecretNumber();
+        }
+
+        function setNewSecretNumber() {
+            secretNumber = Math.floor(Math.random() * 10); // Número aleatório entre 0 e 9
+            hiddenNumberElement.textContent = "X";
+        }
+
+        function checkGuess() {
+    const guess = parseInt(document.getElementById("guess").value);
+
+    if (isNaN(guess)) {
+        alert("Por favor, insira um número válido.");
+        document.getElementById("guess").value = ""; // Limpa a entrada
+        return;
+    }
+
+    if (guess === secretNumber) {
+        score += 10;
+        level++;
+        scoreElement.textContent = `Pontuação: ${score}`;
+        levelElement.textContent = `Fase: ${level}`;
+        message.textContent = "Você acertou!";
+        hiddenNumberElement.textContent = secretNumber;
+        title.style.color = "#00ff00";
+        setTimeout(() => {
+            message.textContent = "Adivinhe o número escondido.";
+            title.style.color = "#00ff00";
+            setNewSecretNumber();
+        }, 2000);
+    } else {
+        score -= 1;
+        lives--;
+        scoreElement.textContent = `Pontuação: ${score}`;
+        livesElement.textContent = `Vidas: ${lives}`;
+        message.textContent = "Você errou!";
+        title.style.color = "red";
+
+        if (lives === 0) {
+            gameOver();
+        } else {
+            setTimeout(() => {
+                message.textContent = "Adivinhe o número escondido.";
+                title.style.color = "#00ff00";
+            }, 2000);
+        }
+    }
+
+    document.getElementById("guess").value = ""; // Limpa a entrada após a tentativa
+}
+
+        function gameOver() {
+            gameContainer.innerHTML = `
+                <div class="lost-message">VOCÊ PERDEU</div>
+                <p>Pontuação final: ${score}</p>
+                <p>Fase alcançada: ${level}</p>
+                <button onclick="restartGame()">Recomeçar</button>
+            `;
+        }
+
+        function restartGame() {
+            location.reload(); // Reinicia a página
+        }
+
+        window.onload = function() {
+            startNewGame(); // Inicia o jogo assim que a página for carregada
+        };
+    </script>
+</body>
+</html>
