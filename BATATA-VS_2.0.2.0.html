@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6844449898267733"
+     crossorigin="anonymous"></script>
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BATATA-VS_2.0</title>
+    <title>BATATA-VS_2.0.1.9</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +24,7 @@
             height: 100vh;
         }
 
-        #caixa {
+        .container {
             width: 100%;
             max-width: 500px;
             background-color: #333;
@@ -29,6 +32,34 @@
             border-radius: 10px;
             text-align: center;
             box-shadow: 0 0 15px #00ff00;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .game-box {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input[type="number"] {
+            width: 60%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #333;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
         }
 
         button {
@@ -39,215 +70,165 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
         }
 
         button:hover {
             background-color: #00cc00;
         }
 
-        input[type="number"] {
+        #result {
+            margin-top: 20px;
             font-size: 18px;
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 300px;
-            background-color: #222;
-            color: #00ff00;
-            border: 2px solid #00ff00;
-            border-radius: 5px;
         }
 
-        .acerto {
-            background-color: #4CAF50;
-            transition: background-color 0.5s;
-        }
-
-        .erro {
-            background-color: #f44336;
-            transition: background-color 0.5s;
-        }
-
-        #menu, #jogo, #resultado, #pontuacoes {
-            display: none;
-        }
-
-        #menu {
-            display: block;
-        }
-
-        #informacoes {
-            font-size: 16px;
+        #message {
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
-        h1, h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        .hidden {
+            visibility: hidden;
         }
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-            text-align: left;
-        }
-
-        ul li {
-            margin: 5px 0;
+        .lost-message {
+            color: red;
+            font-size: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="menu">
-        <div id="caixa">
-            <h1>BATATA-VS_2.0</h1>
-            <button onclick="iniciarJogo()">Iniciar</button>
-            <button onclick="mostrarPontuacoes()">Melhor Pontuação</button>
-            <button onclick="sairJogo()">Sair</button>
+    <amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-6844449898267733"
+     data-ad-slot="2861325454"
+     data-auto-format="rspv"
+     data-full-width="">
+  <div overflow=""></div>
+</amp-ad>
+    <div class="container" id="game-container">
+        <h1 id="title">BATATA-VS_2.0.1.9</h1>
+        <div class="game-info">
+            <p id="score">Pontuação: 0</p>
+            <p id="lives">Vidas: 3</p>
+            <p id="level">Nivel: 1</p>
         </div>
-    </div>
-
-    <div id="jogo">
-        <div id="caixa">
-            <h2 id="status">Lembre-se</h2>
-            <div id="informacoes">
-                <p id="pontos">Pontos: 0</p>
-                <p id="vidas">Vidas: 3</p>
-                <p id="nivel">Nível: 1</p>
-                <p id="nome">Jogador: <span id="nomeJogador">PLAYER</span></p>
+        <div class="game-box">
+            <p id="message">Adivinhe o número escondido.</p>
+            <div>
+                Número escondido: <span id="hidden-number">X</span>
             </div>
-            <div id="numeroAleatorio" style="font-size: 36px; margin-bottom: 20px;"></div>
-            <input type="number" id="resposta" placeholder="Você lembra?" onkeydown="verificarEnter(event)">
-            <button onclick="verificarResposta()">Verificar</button>
-            <button onclick="voltarAoMenu()">Sair</button>
-            <p id="mensagem"></p>
+            <input type="number" id="guess" placeholder="Digite um número" />
+            <button id="submit" onclick="checkGuess()">Submeter</button>
         </div>
-    </div>
-
-    <div id="resultado">
-        <div id="caixa">
-            <h2 id="resultadoTexto"></h2>
-            <button onclick="voltarAoMenu()">Voltar ao Menu</button>
-        </div>
-    </div>
-
-    <div id="pontuacoes">
-        <div id="caixa">
-            <h2>Melhores Pontuações</h2>
-            <ul id="listaPontuacoes"></ul>
-            <button onclick="voltarAoMenu()">Voltar ao Menu</button>
-        </div>
+        <div id="result"></div>
     </div>
 
     <script>
-        let nomeJogador = "PLAYER";
-        let nivel = 1;
-        let vidas = 3;
-        let pontos = 0;
-        let numeroAleatorio;
-        let respostaCorreta;
-        let jogadores = [];
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let secretNumber;
+        let gameStarted = false;
 
-        function iniciarJogo() {
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('jogo').style.display = 'block';
-            nomeJogador = prompt("Digite seu nome:");
-            if (!nomeJogador) nomeJogador = "PLAYER";
-            document.getElementById('nomeJogador').textContent = nomeJogador;
-            atualizarStatus();
-            gerarNumeroAleatorio();
+        const title = document.getElementById("title");
+        const message = document.getElementById("message");
+        const scoreElement = document.getElementById("score");
+        const livesElement = document.getElementById("lives");
+        const levelElement = document.getElementById("level");
+        const hiddenNumberElement = document.getElementById("hidden-number");
+        const gameContainer = document.getElementById("game-container");
+
+        function startNewGame() {
+            score = 0;
+            lives = 3;
+            level = 1;
+            scoreElement.textContent = Pontuação: ${score};
+            livesElement.textContent = Vidas: ${lives};
+            levelElement.textContent = Nivel: ${level};
+            message.textContent = "Adivinhe o número escondido.";
+            hiddenNumberElement.textContent = "X";
+            gameContainer.style.backgroundColor = "#333";
+            title.style.color = "#00ff00";
+            setNewSecretNumber();
         }
 
-        function gerarNumeroAleatorio() {
-            let maxNumber = nivel <= 10 ? 9 : nivel <= 15 ? 99 : nivel <= 20 ? 999 : 9999;
-            numeroAleatorio = Math.floor(Math.random() * (maxNumber + 1));
-            respostaCorreta = numeroAleatorio.toString();
-            document.getElementById('numeroAleatorio').textContent = numeroAleatorio;
+        function setNewSecretNumber() {
+            secretNumber = Math.floor(Math.random() * 10); // Número aleatório entre 0 e 9
+            hiddenNumberElement.textContent = "X";
+        }
+
+        function checkGuess() {
+    const guess = parseInt(document.getElementById("guess").value);
+
+    if (isNaN(guess)) {
+        alert("Por favor, insira um número válido.");
+        document.getElementById("guess").value = ""; // Limpa a entrada
+        return;
+    }
+
+    if (guess === secretNumber) {
+        score += 10;
+        level++;
+        scoreElement.textContent = Pontuação: ${score};
+        levelElement.textContent = Nivel: ${level};
+        message.textContent = "Você acertou!";
+        hiddenNumberElement.textContent = secretNumber;
+        title.style.color = "#00ff00";
+        setTimeout(() => {
+            message.textContent = "Adivinhe o número escondido.";
+            title.style.color = "#00ff00";
+            setNewSecretNumber();
+        }, 2000);
+    } else {
+        score -= 1;
+        lives--;
+        scoreElement.textContent = Pontuação: ${score};
+        livesElement.textContent = Vidas: ${lives};
+        message.textContent = "Você errou!";
+        title.style.color = "red";
+
+        if (lives === 0) {
+            gameOver();
+        } else {
             setTimeout(() => {
-                document.getElementById('numeroAleatorio').textContent = '';
+                message.textContent = "Adivinhe o número escondido.";
+                title.style.color = "#00ff00";
             }, 2000);
         }
+    }
 
-        function verificarResposta() {
-            let resposta = document.getElementById('resposta').value;
-            let caixa = document.getElementById('caixa');
-            if (resposta === respostaCorreta) {
-                pontos += nivel;
-                nivel++;
-                caixa.classList.add('acerto');
-                setTimeout(() => caixa.classList.remove('acerto'), 500);
-            } else {
-                vidas--;
-                caixa.classList.add('erro');
-                setTimeout(() => caixa.classList.remove('erro'), 500);
-            }
-
-            atualizarStatus();
-
-            if (vidas === 0) {
-                terminarJogo('perdeu');
-            } else if (nivel >= 30) {
-                terminarJogo('venceu');
-            } else {
-                gerarNumeroAleatorio();
-            }
-
-            document.getElementById('resposta').value = '';
-        }
-
-        function verificarEnter(event) {
-            if (event.key === 'Enter') {
-                verificarResposta();
-            }
-        }
-
-        function atualizarStatus() {
-            document.getElementById('pontos').textContent = "Pontos: " + pontos;
-            document.getElementById('vidas').textContent = "Vidas: " + vidas;
-            document.getElementById('nivel').textContent = "Nível: " + nivel;
-        }
-
-        function terminarJogo(resultado) {
-            document.getElementById('jogo').style.display = 'none';
-            document.getElementById('resultado').style.display = 'block';
-            let texto = resultado === 'perdeu'
-                ? "Você perdeu! Nível: " +nivel +" Pontos: " +pontos
-                : "Você venceu! Nível: " +nivel +" Pontos: " +pontos;
-            document.getElementById('resultadoTexto').textContent = texto;
-            jogadores.push({ nome: nomeJogador, pontos, nivel });
-            jogadores.sort((a, b) => b.pontos - a.pontos);
-            localStorage.setItem('jogadores', JSON.stringify(jogadores));
-        }
-
-        function voltarAoMenu() {
-    document.getElementById('resultado').style.display = 'none';
-    document.getElementById('pontuacoes').style.display = 'none';
-    document.getElementById('jogo').style.display = 'none'; // Certifique-se de esconder o jogo
-    document.getElementById('menu').style.display = 'block'; // Exiba apenas o menu
-    nivel = 1;
-    vidas = 3;
-    pontos = 0;
-    document.getElementById('numeroAleatorio').textContent = ''; // Limpe a exibição do número aleatório
-    document.getElementById('resposta').value = ''; // Limpe a entrada do jogador
-    atualizarStatus(); // Atualize o estado inicial
+    document.getElementById("guess").value = ""; // Limpa a entrada após a tentativa
 }
-        function mostrarPontuacoes() {
-            let pontuacoes = JSON.parse(localStorage.getItem('jogadores')) || [];
-            let listaPontuacoes = document.getElementById('listaPontuacoes');
-            listaPontuacoes.innerHTML = '';
-            pontuacoes.forEach(jogador => {
-                let li = document.createElement('li');
-                li.textContent = jogador.nome +" Pontos: " +jogador.pontos +" Nível: " +jogador.nivel;
-                listaPontuacoes.appendChild(li);
-            });
-            document.getElementById('menu').style.display = 'none';
-            document.getElementById('pontuacoes').style.display = 'block';
+
+        function gameOver() {
+            gameContainer.innerHTML = `
+                <div class="lost-message">VOCÊ PERDEU</div>
+                <p>Pontuação final: ${score}</p>
+                <p>Nivel alcançado: ${level}</p>
+                <button onclick="restartGame()">Recomeçar</button>
+            `;
         }
 
-        function sairJogo() {
-            alert("Obrigado por jogar!");
-            window.close();
+        function restartGame() {
+            location.reload(); // Reinicia a página
         }
+
+        window.onload = function() {
+            startNewGame(); // Inicia o jogo assim que a página for carregada
+        };
     </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6844449898267733"
+     crossorigin="anonymous"></script>
+<!-- Tome café -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-6844449898267733"
+     data-ad-slot="2861325454"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
 </body>
 </html>
