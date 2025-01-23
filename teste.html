@@ -170,7 +170,7 @@
         score += 10;
         level++;
         scoreElement.textContent = `Pontuação: ${score}`;
-        levelElement.textContent = `Fase: ${level}`;
+        levelElement.textContent = `Nivel: ${level}`;
         message.textContent = "Você acertou!";
         hiddenNumberElement.textContent = secretNumber;
         title.style.color = "#00ff00";
@@ -204,7 +204,7 @@
             gameContainer.innerHTML = `
                 <div class="lost-message">VOCÊ PERDEU</div>
                 <p>Pontuação final: ${score}</p>
-                <p>Fase alcançada: ${level}</p>
+                <p>Nivel alcançado: ${level}</p>
                 <button onclick="restartGame()">Recomeçar</button>
             `;
         }
