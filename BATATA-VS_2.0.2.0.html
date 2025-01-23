@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BATATA-VS_2.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1d1d1d;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #caixa {
+            width: 100%;
+            max-width: 500px;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #1d1d1d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #00cc00;
+        }
+
+        input[type="text"] {
+            font-size: 18px;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 300px;
+            background-color: #222;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+        }
+
+        .acerto {
+            background-color: #4CAF50;
+            transition: background-color 0.5s;
+        }
+
+        .erro {
+            background-color: #f44336;
+            transition: background-color 0.5s;
+        }
+
+        #menu, #jogo, #resultado, #pontuacoes {
+            display: none;
+        }
+
+        #menu {
+            display: block;
+        }
+
+        #informacoes {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        h1, h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+        }
+
+        ul li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="menu">
+        <div id="caixa">
+            <h1>BATATA-VS_2.0</h1>
+            <button onclick="iniciarJogo()">Iniciar</button>
+            <button onclick="mostrarPontuacoes()">Melhor Pontuação</button>
+            <button onclick="sairJogo()">Sair</button>
+        </div>
+    </div>
+
+    <div id="jogo">
+        <div id="caixa">
+            <h2 id="status">Lembre-se</h2>
+            <div id="informacoes">
+                <p id="pontos">Pontos: 0</p>
+                <p id="vidas">Vidas: 3</p>
+                <p id="nivel">Nível: 1</p>
+                <p id="nome">Jogador: <span id="nomeJogador">PLAYER</span></p>
+            </div>
+            <div id="numeroAleatorio" style="font-size: 36px; margin-bottom: 20px;"></div>
+            <input type="text" id="resposta" placeholder="Você lebra?" onkeydown="verificarEnter(event)">
+            <button onclick="verificarResposta()">Verificar</button>
+            <button onclick="voltarAoMenu()">Sair</button>
+            <p id="mensagem"></p>
+        </div>
+    </div>
+
+    <div id="resultado">
+        <div id="caixa">
+            <h2 id="resultadoTexto"></h2>
+            <button onclick="voltarAoMenu()">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <div id="pontuacoes">
+        <div id="caixa">
+            <h2>Melhores Pontuações</h2>
+            <ul id="listaPontuacoes"></ul>
+            <button onclick="voltarAoMenu()">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let nomeJogador = "PLAYER";
+        let nivel = 1;
+        let vidas = 3;
+        let pontos = 0;
+        let numeroAleatorio;
+        let respostaCorreta;
+        let jogadores = [];
+
+        function iniciarJogo() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('jogo').style.display = 'block';
+            nomeJogador = prompt("Digite seu nome:");
+            if (!nomeJogador) nomeJogador = "PLAYER";
+            document.getElementById('nomeJogador').textContent = nomeJogador;
+            atualizarStatus();
+            gerarNumeroAleatorio();
+        }
+
+        function gerarNumeroAleatorio() {
+            let maxNumber = nivel <= 10 ? 9 : nivel <= 15 ? 99 : nivel <= 20 ? 999 : 9999;
+            numeroAleatorio = Math.floor(Math.random() * (maxNumber + 1));
+            respostaCorreta = numeroAleatorio.toString();
+            document.getElementById('numeroAleatorio').textContent = numeroAleatorio;
+            setTimeout(() => {
+                document.getElementById('numeroAleatorio').textContent = '';
+            }, 2000);
+        }
+
+        function verificarResposta() {
+            let resposta = document.getElementById('resposta').value;
+            let caixa = document.getElementById('caixa');
+            if (resposta === respostaCorreta) {
+                pontos += nivel;
+                nivel++;
+                caixa.classList.add('acerto');
+                setTimeout(() => caixa.classList.remove('acerto'), 500);
+            } else {
+                vidas--;
+                caixa.classList.add('erro');
+                setTimeout(() => caixa.classList.remove('erro'), 500);
+            }
+
+            atualizarStatus();
+
+            if (vidas === 0) {
+                terminarJogo('perdeu');
+            } else if (nivel >= 30) {
+                terminarJogo('venceu');
+            } else {
+                gerarNumeroAleatorio();
+            }
+
+            document.getElementById('resposta').value = '';
+        }
+
+        function verificarEnter(event) {
+            if (event.key === 'Enter') {
+                verificarResposta();
+            }
+        }
+
+        function atualizarStatus() {
+            document.getElementById('pontos').textContent = "Pontos: " + pontos;
+            document.getElementById('vidas').textContent = "Vidas: " + vidas;
+            document.getElementById('nivel').textContent = "Nível: " + nivel;
+        }
+
+        function terminarJogo(resultado) {
+            document.getElementById('jogo').style.display = 'none';
+            document.getElementById('resultado').style.display = 'block';
+            let texto = resultado === 'perdeu'
+                ? "Você perdeu! Nível: " +nivel +" Pontos: " +pontos
+                : "Você venceu! Nível: " +nivel +" Pontos: " +pontos;
+            document.getElementById('resultadoTexto').textContent = texto;
+            jogadores.push({ nome: nomeJogador, pontos, nivel });
+            jogadores.sort((a, b) => b.pontos - a.pontos);
+            localStorage.setItem('jogadores', JSON.stringify(jogadores));
+        }
+
+        function voltarAoMenu() {
+    document.getElementById('resultado').style.display = 'none';
+    document.getElementById('pontuacoes').style.display = 'none';
+    document.getElementById('jogo').style.display = 'none'; // Certifique-se de esconder o jogo
+    document.getElementById('menu').style.display = 'block'; // Exiba apenas o menu
+    nivel = 1;
+    vidas = 3;
+    pontos = 0;
+    document.getElementById('numeroAleatorio').textContent = ''; // Limpe a exibição do número aleatório
+    document.getElementById('resposta').value = ''; // Limpe a entrada do jogador
+    atualizarStatus(); // Atualize o estado inicial
+}
+        function mostrarPontuacoes() {
+            let pontuacoes = JSON.parse(localStorage.getItem('jogadores')) || [];
+            let listaPontuacoes = document.getElementById('listaPontuacoes');
+            listaPontuacoes.innerHTML = '';
+            pontuacoes.forEach(jogador => {
+                let li = document.createElement('li');
+                li.textContent = jogador.nome +" Pontos: " +jogador.pontos +" Nível: " +jogador.nivel;
+                listaPontuacoes.appendChild(li);
+            });
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('pontuacoes').style.display = 'block';
+        }
+
+        function sairJogo() {
+            alert("Obrigado por jogar!");
+            window.close();
+        }
+    </script>
+</body>
+</html>
