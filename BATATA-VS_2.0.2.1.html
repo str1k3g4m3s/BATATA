@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>"BATATA-VS_2.3"</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Estilo geral */
+        body {
+            background-color: #000000;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        /* Container principal */
+        #container {
+            width: 90%;
+            max-width: 500px;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000000;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #0d850f;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Título */
+        h1 {
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            #container {
+                font-size: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>BATATA-VS_2.3</h1>
+    </div> 
+
+    <script>
+        var h1 = document.querySelector('h1');
+        var style = document.body.style;
+        var container = document.getElementById('container');
+        var colors = ['red', 'green'];
+        var i = 0;
+
+        // Alteração das cores do fundo
+        setInterval(function() {
+            container.style.backgroundColor = colors[i];
+            style.backgroundColor = colors[(i + 1) % colors.length];
+            i = (i + 1) % colors.length;
+        }, 100);
+
+        // Animação do texto
+        var text = 'BATATA-VS_2.3';
+        var j = 0;
+        setInterval(function() {
+            h1.textContent = text.substring(0, j);
+            j = (j + 1) % (text.length + 1);
+        }, 70);
+
+        // Timeout para redirecionamento
+        var timeout = setTimeout(function() {
+            home();
+        }, 2000);
+
+        // Cancela o redirecionamento ao clicar e redireciona manualmente
+        document.addEventListener('click', function() {
+            clearTimeout(timeout);
+            home();
+        });
+
+        function home() {
+            window.location.href = 'home.html';
+        }
+    </script>
+</body>
+</html>

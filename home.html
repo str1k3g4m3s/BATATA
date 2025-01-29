@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            color: #fff;
+        }
+    
+        header {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+    
+        header button {
+            background-image: url('logo.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 50px;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+        }
+    
+        header h1 {
+            color: #00ff00;
+            margin: 0;
+            font-size: 2rem;
+            text-align: center;
+            flex: 1;
+        }
+    
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 0 15px #00ff00;
+            background-color: #111;
+            border-radius: 10px;
+        }
+    
+        .container h1 {
+            font-size: 20px;
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+    
+        .container p {
+            font-size: 20px;
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+    
+        .container input {
+            font-size: 1rem;
+            padding: 10px;
+            margin-bottom: 15px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    
+        .container button {
+            display: flex;
+            font-size: 1rem;
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .container button:hover {
+            background-color: #00cc00;
+        }
+    
+        /* Grid layout para os botões */
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+    
+        .button-grid button {
+            font-size: 1em;
+            padding: 10px 20px;
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .button-grid button:hover {
+            background-color: #00cc00;
+        }
+    
+        footer {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+    
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button onclick="window.location.href='https://sites.google.com/view/sitrikegames/in%C3%ADcio?fbclid=PAY2xjawIGTNVleHRuA2FlbQIxMQABpjVRlCItEZzvW7NWdxa6Mo2xVDr4BZZyQ8PqqsZvAWYmJ_rKfDXdZNsFbQ_aem_J0lnB07s1rAl5k0VoeK7pA'"></button>
+        <h1>BATATA-VS_2.3</h1>
+    </header>
+    <div class="container">
+        <h1>Digite seu nome:</h1>
+        <input type="text" id="nick" placeholder="Seu Nick">
+        <button onclick="start()">Iniciar</button>
+    </div>
+    <footer>
+        <p>StrikeGames®</p>
+    </footer>
+    <audio id="meuaudio" src="tema.mp3"></audio>
+    <audio id="audiomeu" src="tema2.mp3" preload="auto"></audio>
+    <script>
+        window.onload = function() {
+            var audio = document.getElementById("audiomeu");
+    
+            document.body.addEventListener('click', function() {
+                audio.play();
+
+                document.body.removeEventListener('click', arguments.callee);
+            });
+    
+            document.getElementById('nick').focus();
+    
+            var h1 = document.querySelector('h1');
+            var colors = ['#00ff00', '#00cc00'];
+            var i = 0;
+    
+            setInterval(function() {
+                h1.style.color = colors[i];
+                i = (i + 1) % colors.length;
+            }, 800);
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    start();
+                }
+            });
+
+            document.getElementById("nick").focus();
+        };
+    
+        var nome, vidas, pontos, nivel;
+    
+        function start() {
+            var nick = document.getElementById('nick').value;
+            if (nick) {
+                startgame();
+            } else {
+                alert('Informe seu nick para iniciar.');
+            }
+        }
+    
+        function startgame() {
+            nome = document.getElementById('nick').value;
+            vidas = 3;
+            pontos = 0;
+            nivel = 1;
+
+            musicatema();
+            nivel1();
+        }
+    
+    function nivel1() {
+        var numero = 0;
+        document.querySelector('.container').innerHTML = `
+           <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+            <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Lembre-se deste número:</p>
+            <span style="font-size: 5em; color: #00ff00;">${numero}</span>
+        `;
+
+        setTimeout(function() {
+            nivel1a(numero);
+        }, 1000);
+    
+
+    function nivel1a(numero) {
+            var numero = 0;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Você lembra qual número apareceu?</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+    }
+        function nivel2() {
+            var numero = 3;
+            document.querySelector('.container').innerHTML = `
+              <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quantos lados tem um triângulo?</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+    
+        function nivel3() {
+            var respostaCorreta = "ri";
+    
+            document.querySelector('.container').innerHTML = `
+               <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Forme um anagrama com a palavra "IR".</p>
+                <input type="text" id="resposta" placeholder="Resposta">
+                <button onclick="verificarTexto('${respostaCorreta}')">Verificar</button>
+            `;
+
+            document.getElementById('resposta').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarTexto(respostaCorreta);
+                }
+            });+
+
+            document.getElementById("resposta").focus();
+        }
+    
+        function verificarTexto(respostaEsperada) {
+            var resposta = document.getElementById('resposta').value.toLowerCase();
+    
+            if (resposta === respostaEsperada) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+    
+    function nivel4() {
+        document.querySelector('.container').innerHTML = `
+            <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: 🔒 | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+            <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px); color: red;">Você tem apenas uma chance!</p>
+            <p style="white-space: nowrap; font-size: clamp(15px, 2.5vw, 20px)">A tecnologia de comunicação Bluetooth tirou seu nome de:</p>
+            <div class="button-grid">
+                <button onclick="vericlick(false)">a) Um rio</button>
+                <button onclick="vericlick(true)">b) Um rei</button>
+                <button onclick="vericlick(false)">c) Um general</button>
+                <button onclick="vericlick(false)">d) Um viking</button>
+        `;
+    }
+
+    function vericlick(isCorrect) {
+        if (isCorrect) {
+            acerto();
+        } else {
+            gameover();
+        }
+    }
+        
+        function nivel5() {
+            var respostasCorretas = ["alergia", "regalia", "galeria"];
+    
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Forme um anagrama com a palavra "ALEGRIA".</p>
+                <input type="text" id="resposta" placeholder="Resposta">
+                <button onclick="verificarAnagrama()">Verificar</button>
+            `;
+
+            document.getElementById('resposta').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarAnagrama();
+                }
+            });
+
+            document.getElementById("resposta").focus();
+        }
+    
+        function verificarAnagrama() {
+            var resposta = document.getElementById('resposta').value.toLowerCase();
+            var respostasCorretas = ["alergia", "regalia", "galeria"];
+    
+            if (respostasCorretas.includes(resposta)) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+    
+        function nivel6(){
+            var numero = 190;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Lembre-se:</p>
+                <span style="font-size: 5em; color: #00ff00;">${numero}</span>
+            `;
+            setTimeout(function() {
+                nivel6a(numero);
+            }, 1000);
+        
+
+        function nivel6a(numero) {
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual era o número?</p>
+                <input type="number" id="numero" placeholder="Digite o numero">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+    }
+
+        function verificar(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+
+        function nivel7(){
+            var numero = 2;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quantas patas um pato têm?</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+
+        function verificar(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+
+        function nivel8(){
+            var numero = 70;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Se um pato tem 2 patas. Quantas patas 35 patos têm?</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+
+        function verificar(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+        function nivel9(){
+            var numero = 140;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(14px, 2.5vw, 20px)">Se 35 patos têm 70 patas, quantas patas 35 cachorros têm?</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificarNivel9(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarNivel9(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+
+
+        function verificarNivel9(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+
+        function nivel10() {
+            var respostasCorretas = ["portasse", "postares", "respostas", "pastores"];
+    
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(15px, 2.5vw, 20px)">Forme um anagrama com a palavra "SOPRASTES".</p>
+                <input type="text" id="resposta" placeholder="Resposta">
+                <button onclick="verificarAnagrama10()">Verificar</button>
+            `;
+
+            document.getElementById('resposta').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarAnagrama10();
+                }
+            });
+
+            document.getElementById("resposta").focus();
+        }
+    
+        function verificarAnagrama10() {
+            var resposta = document.getElementById('resposta').value.toLowerCase();
+            var respostasCorretas = ["portasse", "postares", "pastores", "respostas"];
+    
+            if (respostasCorretas.includes(resposta)) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+        function nivel11(){
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(15px, 2.5vw, 20px)">A invenção do chuveiro elétrico surgiu em qual país?</p>
+        <div class="button-grid">
+            <button onclick="vericlick(false)">a) FRANÇA</button>
+            <button onclick="vericlick(false)">b) INGLATERRA</button>
+            <button onclick="vericlick(true)">c) BRASIL</button>
+            <button onclick="vericlick(false)">d) ITÁLIA</button>
+        `;
+}
+
+function vericlick(isCorrect) {
+    if (isCorrect) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel12(){
+    var numero = 1234;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual a raiz quadrada de 1522756?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel12(${numero})">Verificar</button>
+    `;
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel12(numero);
+        }
+    });
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel12(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel13(){
+    var numero = 14;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(18px, 2.5vw, 25px)">Qual o dia do aniversário do Albert Einstein?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel13(${numero})">Verificar</button>
+    `;
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel13(numero);
+        }
+    });
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel13(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel14(){
+    var numero = 10;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">E do Nikola Tesla?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel14(${numero})">Verificar</button>
+    `;
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel14(numero);
+        }
+    });
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel14(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel15(){
+    var respostasCorretas = ["perda", "padre"];
+  
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Anagrama com "PEDRA":</p>
+        <input type="text" id="resposta" placeholder="Resposta">
+        <button onclick="verificarAnagramaNivel15()">Verificar</button>
+    `;
+    document.getElementById('resposta').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarAnagramaNivel15();
+        }
+    });
+    document.getElementById("resposta").focus();
+}
+
+function verificarAnagramaNivel15() {
+    var resposta = document.getElementById('resposta').value.toLowerCase();
+    var respostasCorretas = ["perda", "padre"];
+
+    if (respostasCorretas.includes(resposta)) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel16(){
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Quem descobriu a Dietilamida do Ácido Lisérgico?</p>
+        <div class="button-grid">
+            <button onclick="vericlick(false)">a) Nikola Tesla</button>
+            <button onclick="vericlick(false)">b) Benjamin Button</button>
+            <button onclick="vericlick(false)">c) Platão</button>
+            <button onclick="vericlick(true)">d) Albert Hoffman</button>
+        `;
+}
+
+function nivel17(){
+    var numero = 12248;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Lembre-se:</p>
+        <span style="font-size: 3em; color: #00ff00;">${numero}</span>
+    `;
+    setTimeout(function() {
+        nivel1a(numero);
+    }, 1000);
+
+    function nivel1a(numero) {
+        document.querySelector('.container').innerHTML = `
+            <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+            <p style="white-space: nowrap; font-size: clamp(15px, 2.5vw, 20px)">Você lembra?</p>
+            <input type="number" id="numero" placeholder="Digite o número">
+            <button onclick="verificar(${numero})">Verificar</button>
+        `;
+        document.getElementById('numero').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                verificar(numero);
+            }
+        });
+        document.getElementById("numero").focus();
+    }
+}
+
+function verificar(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel18(){
+    var respostasCorretas = ["armadura", "arrumada", "duraram"];
+  
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Forme um anagrama com a palavra "MADURARA":</p>
+        <input type="text" id="resposta" placeholder="Resposta">
+        <button onclick="verificarAnagramaNivel18()">Verificar</button>
+    `;
+    document.getElementById('resposta').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarAnagramaNivel18();
+        }
+    });
+    document.getElementById("resposta").focus();
+}
+
+function verificarAnagramaNivel18() {
+    var resposta = document.getElementById('resposta').value.toLowerCase();
+    var respostasCorretas = ["armadura", "arrumada", "duraram"];
+
+    if (respostasCorretas.includes(resposta)) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel19(){
+    var numero = 15;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quando é 6 + 9?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel19(${numero})">Verificar</button>
+    `;
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel19(numero);
+        }
+    });
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel19(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel20(){
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: 🔒 | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px); color: red;">Vidas Bloqueadas!</p>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">O que cai de pé e corre deitado?</p>
+        <div class="button-grid">
+            <button onclick="vericlick(true)">a) Chuva</button>
+            <button onclick="vericlick(true)">b) Pingo</button>
+            <button onclick="vericlick(true)">c) Gota</button>
+            <button onclick="vericlick(true)">d) Gato</button>
+        `;
+}
+    function vericlick(isCorrect) {
+        if (isCorrect) {
+            acerto();
+        } else {
+            gameover();
+        }
+    }
+
+    function nivel21(){
+    var numero = 10203040150;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Lembre-se deste número:</p>
+        <span style="font-size: 2em; color: #00ff00;">${numero}</span>
+    `;
+    setTimeout(function() {
+        nivel1a(numero);
+    }, 1000);
+
+    function nivel1a(numero) {
+        document.querySelector('.container').innerHTML = `
+           <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+            <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual era o número?</p>
+            <input type="number" id="numero" placeholder="Digite o número">
+            <button onclick="verificar(${numero})">Confirmar</button>
+        `;
+
+        document.getElementById('numero').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                verificar(numero);
+            }
+        });
+
+        document.getElementById("numero").focus();
+    }
+}
+
+function verificar(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel22(){
+    var respostasCorretas = ["mora", "roma", "ramo"];
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Forme um anagrama com a palavra "AMOR":</p>
+        <input type="text" id="resposta" placeholder="Resposta">
+        <button onclick="verificarAnagramaNivel22()">Confirmar</button>
+    `;
+
+    document.getElementById('resposta').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarAnagramaNivel22();
+        }
+    });
+
+    document.getElementById("resposta").focus();
+}
+
+function verificarAnagramaNivel22() {
+    var resposta = document.getElementById('resposta').value.toLowerCase();
+    var respostasCorretas = ["mora", "roma", "ramo"];
+
+    if (respostasCorretas.includes(resposta)) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel23(){
+    var respostasCorretas = "batata";
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">O que é amarelo e cresce na terra?</p>
+        <input type="text" id="resposta" placeholder="Resposta">
+        <button onclick="verificarAnagramaNivel10()">Confirmar</button>
+    `;
+
+    document.getElementById('resposta').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarAnagramaNivel10();
+        }
+    });
+
+    document.getElementById("resposta").focus();
+}
+
+function verificarAnagramaNivel10() {
+    var resposta = document.getElementById('resposta').value.toLowerCase();
+    var respostasCorretas = ["batata"];
+
+    if (respostasCorretas.includes(resposta)) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel24(){
+    document.querySelector('.container').innerHTML = `
+       <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual a montanha mais alta do Brasil?</p>
+        <div class="button-grid">
+        <button onclick="vericlick(true)">a) Pico da Neblina</button>
+        <button onclick="vericlick(false)">b) Pico Paraná</button>
+        <button onclick="vericlick(false)">c) Monte Roraima</button>
+        <button onclick="vericlick(false)">d) Pico da Bandeira</button>
+    `;
+}
+
+function vericlick(isCorrect) {
+    if (isCorrect) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel25(){
+    var numero = 25;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: 🔒</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Em que nível você está agora?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel25(${numero})">Confirmar</button>
+    `;
+
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel25(numero);
+        }
+    });
+
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel25(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel26(){   
+    var numero = 20;
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quanto é 11 + 9 ?</p>
+        <input type="number" id="numero" placeholder="Resposta">
+        <button onclick="verificarNivel26(${numero})">Confirmar</button>
+    `;
+
+    document.getElementById('numero').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            verificarNivel26(numero);
+        }
+    });
+
+    document.getElementById("numero").focus();
+}
+
+function verificarNivel26(numeroEsperado) {
+    var resposta = document.getElementById('numero').value;
+
+    if (parseInt(resposta) === numeroEsperado) {
+        acerto();
+    } else {
+        errou();
+    }
+}
+
+function nivel27(){
+    document.querySelector('.container').innerHTML = `
+    <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
+    <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quem descobriu o Brasil?</p>
+    <div class="button-grid">
+    <button onclick="vericlick(false)">a) Colombo</button>
+    <button onclick="vericlick(true)">b) Cabral</button>
+    <button onclick="vericlick(false)">c) Caminha</button>
+    <button onclick="vericlick(true)">d) Os índios</button>
+    `;
+}
+
+function vericlick(isCorrect) {
+    if (isCorrect) {
+        acerto();
+    } else {
+        gameover();
+    }
+}
+    function nivel28(){
+        
+        var numero = 9869;
+            document.querySelector('.container').innerHTML = `
+              <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Lembre-se:</p>
+                <span style="font-size: 3em; color: #00ff00;">${numero}</span>
+            `;
+            setTimeout(function() {
+                nivel1a(numero);
+            }, 1000);
+    
+        function nivel1a(numero) {
+            document.querySelector('.container').innerHTML = `
+               <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual era o número?</p>
+                <input type="number" id="numero" placeholder="Digite o número">
+                <button onclick="verificar(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificar(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+    }
+    
+        function verificar(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+        }
+
+        function nivel29(){
+            var numero = 188;
+            document.querySelector('.container').innerHTML = `
+                <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+                <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">RESOLVA: 2+(20-19)X(100-99)+200-15=</p>
+                <input type="number" id="numero" placeholder="Resposta">
+                <button onclick="verificarNivel29(${numero})">Verificar</button>
+            `;
+
+            document.getElementById('numero').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    verificarNivel29(numero);
+                }
+            });
+
+            document.getElementById("numero").focus();
+        }
+
+
+        function verificarNivel29(numeroEsperado) {
+            var resposta = document.getElementById('numero').value;
+    
+            if (parseInt(resposta) === numeroEsperado) {
+                acerto();
+            } else {
+                errou();
+            }
+
+        }
+
+        function nivel30(){
+            document.querySelector('.container').innerHTML = `
+           <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">   Jogador: ${nome} | Vidas: 🔒 | Pontos: ${pontos} | Nivel: ${nivel}</h1>
+            <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px); color: red;">Vidas Bloquedas!</p>
+            <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual o país mais novo do mundo?</p>
+            <div class="button-grid">
+            <button onclick="vericlick(false)">a) Timor Leste</button>
+            <button onclick="vericlick(false)">b) Kosovo</button>
+            <button onclick="vericlick(true)">c) Suldão do Sul</button>
+            <button onclick="vericlick(false)">d) Palau</button>
+        `;
+    }
+
+    function vericlick(isCorrect) {
+        if (isCorrect) {
+            acerto();
+        } else {
+            gameover();
+        }
+    }
+
+
+    function gameover() {
+    var style = document.body.style;
+    let isRed = true;
+
+    // Função para alternar o fundo entre vermelho e original
+    function piscarFundo() {
+        if (isRed) {
+            style.backgroundColor = 'red'; // Cor de fundo vermelha
+        } else {
+            style.backgroundColor = ''; // Cor de fundo original
+        }
+        isRed = !isRed; // Alterna entre vermelho e fundo original
+    }
+
+    
+    var intervalo = setInterval(piscarFundo, 500);
+
+   
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px)">Suas vidas acabaram!</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Jogador: ${nome} | Pontos: ${pontos} | Nivel: ${nivel}</p>
+        <button onclick="restart()">Reiniciar</button>
+    `;
+
+  
+    document.querySelector('button').addEventListener('click', function() {
+        clearInterval(intervalo); 
+    });
+}
+    
+        function restart() {
+            window.location.href = 'home.html';
+        }
+    
+        function acerto() {
+            var numeroq = Math.floor(Math.random() * 100);
+            var style = document.body.style;
+            style.backgroundColor = 'green';
+            setTimeout(function() {
+                style.backgroundColor = '';
+            }, 1000);
+            pontos = pontos + numeroq;
+            nivel ++;
+            proximoniv();
+        }
+    
+        function errou() {
+
+            var h1 = document.querySelector('h1');
+            h1.style.color = 'red';
+            setTimeout(function() {
+                h1.style.color = '';
+            }, 1000);
+
+            var style = document.body.style;
+            style.backgroundColor = 'red';
+            setTimeout(function() {
+                style.backgroundColor = '';
+            }, 1000);
+            
+            vidas -= 1;
+            if (vidas === 0) {
+                gameover();
+            } else {
+                proximoniv();
+            }
+        }
+    
+        function proximoniv() {
+            switch (nivel) {
+                case 1: nivel1(); break;
+                case 2: nivel2(); break;
+                case 3: nivel3(); break;
+                case 4: nivel4(); break;
+                case 5: nivel5(); break;
+                case 6: nivel6(); break;
+                case 7: nivel7(); break;
+                case 8: nivel8(); break;
+                case 9: nivel9(); break;
+                case 10: nivel10(); break;
+                case 11: nivel11(); break;
+                case 12: nivel12(); break;
+                case 13: nivel13(); break;
+                case 14: nivel14(); break;
+                case 15: nivel15(); break;
+                case 16: nivel16(); break;
+                case 17: nivel17(); break;
+                case 18: nivel18(); break;
+                case 19: nivel19(); break;
+                case 20: nivel20(); break;
+                case 21: nivel21(); break;
+                case 22: nivel22(); break;
+                case 23: nivel23(); break;
+                case 24: nivel24(); break;
+                case 25: nivel25(); break;
+                case 26: nivel26(); break;
+                case 27: nivel27(); break;
+                case 28: nivel28(); break;
+                case 29: nivel29(); break;
+                case 30: nivel30(); break;
+                default: venceu(); break;
+            }
+        }
+
+        function venceu() {
+    var style = document.body.style;
+    let isGreen = true;
+
+    
+    function piscarFundo() {
+        if (isGreen) {
+            style.backgroundColor = 'green'; 
+        } else {
+            style.backgroundColor = ''; 
+        }
+        isGreen = !isGreen; 
+    }
+
+   
+    var intervalo = setInterval(piscarFundo, 500); 
+
+  
+    document.querySelector('.container').innerHTML = `
+        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px); color: red;">Você venceu!</h1>
+        <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Jogador: ${nome} | Pontos: ${pontos} | Nivel: ${nivel}</p>
+        <button onclick="restart()">Reiniciar</button>
+    `;
+
+    // Se o jogador clicar no botão de reiniciar, a animação de piscar será parada
+    document.querySelector('button').addEventListener('click', function() {
+        clearInterval(intervalo); // Para o piscar quando o jogo for reiniciado
+    });
+}
+        
+
+        function musicatema(){
+            var audio = document.getElementById("audiomeu");
+            audio.pause();
+            var audio = document.getElementById("meuaudio");
+            audio.play();
+        }
+    </script>
+</body>
+</html>
