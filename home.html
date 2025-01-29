@@ -624,11 +624,19 @@ function nivel16(){
         <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
         <p style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 20px)">Quem descobriu a Dietilamida do Ácido Lisérgico?</p>
         <div class="button-grid">
-            <button onclick="vericlick(false)">a) Nikola Tesla</button>
-            <button onclick="vericlick(false)">b) Benjamin Button</button>
-            <button onclick="vericlick(false)">c) Platão</button>
-            <button onclick="vericlick(true)">d) Albert Hoffman</button>
+            <button onclick="vericlicknivel16(false)">a) Nikola Tesla</button>
+            <button onclick="vericlicknivel16(false)">b) Benjamin Button</button>
+            <button onclick="vericlicknivel16(false)">c) Platão</button>
+            <button onclick="vericlicknivel16(true)">d) Albert Hoffman</button>
         `;
+}
+
+function vericlicknivel16(isCorrect) {
+    if (isCorrect) {
+        acerto();
+    } else {
+        errou();
+    }
 }
 
 function nivel17(){
@@ -844,14 +852,14 @@ function nivel24(){
        <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
         <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Qual a montanha mais alta do Brasil?</p>
         <div class="button-grid">
-        <button onclick="vericlick(true)">a) Pico da Neblina</button>
-        <button onclick="vericlick(false)">b) Pico Paraná</button>
-        <button onclick="vericlick(false)">c) Monte Roraima</button>
-        <button onclick="vericlick(false)">d) Pico da Bandeira</button>
+        <button onclick="vericlicknivel24(true)">a) Pico da Neblina</button>
+        <button onclick="vericlicknivel24(false)">b) Pico Paraná</button>
+        <button onclick="vericlicknivel24(false)">c) Monte Roraima</button>
+        <button onclick="vericlicknivel24(false)">d) Pico da Bandeira</button>
     `;
 }
 
-function vericlick(isCorrect) {
+function vericlicknivel24(isCorrect) {
     if (isCorrect) {
         acerto();
     } else {
@@ -920,18 +928,18 @@ function nivel27(){
     <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nível: ${nivel}</h1>
     <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Quem descobriu o Brasil?</p>
     <div class="button-grid">
-    <button onclick="vericlick(false)">a) Colombo</button>
-    <button onclick="vericlick(true)">b) Cabral</button>
-    <button onclick="vericlick(false)">c) Caminha</button>
-    <button onclick="vericlick(true)">d) Os índios</button>
+    <button onclick="vericlicknivel27(false)">a) Colombo</button>
+    <button onclick="vericlicknivel27(true)">b) Cabral</button>
+    <button onclick="vericlicknivel27(false)">c) Caminha</button>
+    <button onclick="vericlicknivel27(true)">d) Os índios</button>
     `;
 }
 
-function vericlick(isCorrect) {
+function vericlicknivel27(isCorrect) {
     if (isCorrect) {
         acerto();
     } else {
-        gameover();
+        errou();
     }
 }
     function nivel28(){
@@ -1045,7 +1053,7 @@ function vericlick(isCorrect) {
 
    
     document.querySelector('.container').innerHTML = `
-        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px)">Suas vidas acabaram!</h1>
+        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px); color: red;">Suas vidas acabaram!</h1>
         <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Jogador: ${nome} | Pontos: ${pontos} | Nivel: ${nivel}</p>
         <button onclick="restart()">Reiniciar</button>
     `;
