@@ -1057,7 +1057,7 @@ function vericlick(isCorrect) {
 }
     
         function restart() {
-            window.location.href = 'https://str1k3g4m3s.github.io/BATATA/batata=vs_2.0.2.1.html';
+            window.location.href = 'https://str1k3g4m3s.github.io/BATATA/BATATA-VS_2.0.2.1.html';
         }
     
         function acerto() {
@@ -1149,7 +1149,7 @@ function vericlick(isCorrect) {
 
   
     document.querySelector('.container').innerHTML = `
-        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px); color: red;">Você venceu!</h1>
+        <h1 style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 40px)">Você venceu!</h1>
         <p style="white-space: nowrap; font-size: clamp(20px, 2.5vw, 30px)">Jogador: ${nome} | Pontos: ${pontos} | Nivel: ${nivel}</p>
         <button onclick="restart()">Reiniciar</button>
     `;
@@ -1165,6 +1165,7 @@ function vericlick(isCorrect) {
             var audio = document.getElementById("audiomeu");
             audio.pause();
             var audio = document.getElementById("meuaudio");
+            audio.loop = true;
             audio.play();
         }
     </script>
