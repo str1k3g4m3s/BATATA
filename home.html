@@ -498,14 +498,14 @@
         <h1 style="white-space: nowrap; font-size: clamp(16px, 2.5vw, 40px)">Jogador: ${nome} | Vidas: ${vidas} | Pontos: ${pontos} | Nivel: ${nivel}</h1>
         <p style="white-space: nowrap; font-size: clamp(15px, 2.5vw, 20px)">A invenção do chuveiro elétrico surgiu em qual país?</p>
         <div class="button-grid">
-            <button onclick="vericlick(false)">a) FRANÇA</button>
-            <button onclick="vericlick(false)">b) INGLATERRA</button>
-            <button onclick="vericlick(true)">c) BRASIL</button>
-            <button onclick="vericlick(false)">d) ITÁLIA</button>
+            <button onclick="vericlick1(false)">a) FRANÇA</button>
+            <button onclick="vericlick1(false)">b) INGLATERRA</button>
+            <button onclick="vericlick1(true)">c) BRASIL</button>
+            <button onclick="vericlick1(false)">d) ITÁLIA</button>
         `;
 }
 
-function vericlick(isCorrect) {
+function vericlick1(isCorrect) {
     if (isCorrect) {
         acerto();
     } else {
