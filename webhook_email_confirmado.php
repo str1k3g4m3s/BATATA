@@ -1,6 +1,18 @@
 <?php
 header('Content-Type: application/json');
-require 'config.php';
+$BANK_URL = "https://hjcepiivzfqsenyfesez.supabase.co";
+$BANK_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhqY2VwaWl2emZxc2VueWZlc2V6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczODU1MjAxNSwiZXhwIjoyMDU0MTI4MDE1fQ.cQWyg3AS6I5j0SU28RsC5s4GXHTN5u0Shufvqqs-pf0";//chave privada
+$BANK_KET_USR = "perfilimagens";
+$BANK_KET_PROD = "imagensdosprodutos";
+// URL da API do Supabase (endpoint para obter dados da tabela 'profiles')
+$url = "$BANK_URL/rest/v1/profiles";
+
+// Cabeçalhos para autenticação
+$headers = [
+    "Content-Type: application/json",
+    "apikey: $BANK_KEY",
+    "Authorization: Bearer $BANK_KEY"
+];
 
 // 📌 Captura a requisição do Supabase
 $dados = json_decode(file_get_contents("php://input"), true);
